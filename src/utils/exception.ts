@@ -1,6 +1,6 @@
 import { Has } from 'conditional-type-checks';
 
-export type Exception<message extends string | undefined> = {
+export type Exception<message extends string = string> = {
   type: 'exception';
   message: message;
 };

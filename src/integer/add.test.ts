@@ -1,18 +1,18 @@
 import { assert, IsExact } from 'conditional-type-checks';
 import { IsException } from '../utils/exception';
-import { AddUint } from './add';
+import { Add } from './add';
 
-assert<IsException<AddUint<[1, 0], [1, 0, 0]>>>(true);
-assert<IsException<AddUint<[1, 1], [1, 0]>>>(true);
+assert<IsException<Add<[1, 0], [1, 0, 0]>>>(true);
+assert<IsException<Add<[1, 1], [1, 0]>>>(true);
 
 // 1 + 1 = 2
-assert<IsExact<AddUint<[1, 0], [1, 0]>, [0, 1]>>(true);
+assert<IsExact<Add<[1, 0], [1, 0]>, [0, 1]>>(true);
 // 3 + 1 = 4
-assert<IsExact<AddUint<[1, 1, 0], [1, 0, 0]>, [0, 0, 1]>>(true);
+assert<IsExact<Add<[1, 1, 0], [1, 0, 0]>, [0, 0, 1]>>(true);
 // 12345 + 67890 = 80235
 assert<
   IsExact<
-    AddUint<
+    Add<
       [1, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0],
       [0, 1, 0, 0, 1, 1, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 1]
     >,
@@ -23,7 +23,7 @@ assert<
 // prettier-ignore
 assert<
   IsExact<
-  AddUint<
+  Add<
       [0,0,0,0,1,0,0,0,0,1,1,1,0,0,0,0,1,0,1,1,0,1,1,1,0,1,1,1,1,0,1,0,1,0,0,1,1,1,0,1,1,1,0,1,1,1,0,1,0,1,1,1,0,0,0,1,1,0],
       [0,0,0,0,1,0,0,0,1,1,1,1,1,0,1,0,0,0,0,0,1,0,1,1,0,0,1,1,0,1,0,1,1,1,0,1,0,0,1,0,1,1,0,1,1,0,0,1,0,1,1,0,1,1,0,1,1,0]
     >,

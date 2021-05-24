@@ -1,4 +1,5 @@
 import { Bit, Bits } from '../model';
+import { Cast } from '../utils/cast';
 import { Exception } from '../utils/exception';
 import {
   Natural,
@@ -27,21 +28,28 @@ export type FullAddrMap = {
 export type FullAdder<b1 extends Bit, b2 extends Bit, carry_in extends Bit> =
   FullAddrMap[`${b1}${b2}${carry_in}`];
 
-export type AddUint<b1 extends Bits, b2 extends Bits> =
+export type BitsAdderResult<
+  sum extends Bits = Bits,
+  carry_out extends Bit = Bit
+> = {
+  sum: sum;
+  carry_out: carry_out;
+};
+export type BitsAdder<b1 extends Bits, b2 extends Bits> = Cast<
   b1['length'] extends b2['length']
     ? ExtractResult<
         _AdderRecursive1<[], 0, NumberToNatural<0>, { b1: b1; b2: b2 }>
       >
-    : Exception<'Add: length of b1 and b2 must be equal'>;
-export type _AdderRecursive1<
+    : Exception<'BitsAdder: length of b1 and b2 must be equal'>,
+  BitsAdderResult | Exception
+>;
+type _AdderRecursive1<
   result extends Bits,
   carry_in extends Bit,
   index extends Natural,
   consts extends { b1: Bits; b2: Bits }
 > = NaturalToNumber<index> extends consts['b1']['length']
-  ? carry_in extends 1
-    ? Exception<'Add: overflow occurred'>
-    : result
+  ? BitsAdderResult<result, carry_in>
   : {
       _: _AdderRecursive2<
         FullAdder<
@@ -54,7 +62,7 @@ export type _AdderRecursive1<
         consts
       >;
     };
-export type _AdderRecursive2<
+type _AdderRecursive2<
   adder_result extends AdderResult,
   result extends Bits,
   index extends Natural,
@@ -67,3 +75,11 @@ export type _AdderRecursive2<
     consts
   >;
 };
+
+export type Add<b1 extends Bits, b2 extends Bits> = _Add2<BitsAdder<b1, b2>>;
+type _Add2<adder_result extends BitsAdderResult | Exception> =
+  adder_result extends BitsAdderResult
+    ? adder_result['carry_out'] extends 1
+      ? Exception<'Add: overflow occurred'>
+      : adder_result['sum']
+    : adder_result;
