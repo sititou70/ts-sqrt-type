@@ -1,6 +1,13 @@
 import { assert, IsExact, Has } from 'conditional-type-checks';
 import { IsException } from './exception';
-import { Succ, NumberToNatural, NaturalToNumber, Pred } from './natural_number';
+import {
+  Succ,
+  NumberToNatural,
+  NaturalToNumber,
+  Pred,
+  AddNatural,
+  SubNatural,
+} from './natural_number';
 
 // test data
 type Natural5 = [1, 1, 1, 1, 1];
@@ -28,6 +35,57 @@ assert<IsExact<Succ<[1]>, [1, 1]>>(true);
 assert<IsException<Pred<[]>>>(true);
 assert<IsExact<Pred<[1]>, []>>(true);
 assert<IsExact<Pred<[1, 1]>, [1]>>(true);
+
+assert<
+  IsExact<
+    AddNatural<NumberToNatural<0>, NumberToNatural<0>>,
+    NumberToNatural<0>
+  >
+>(true);
+assert<
+  IsExact<
+    AddNatural<NumberToNatural<0>, NumberToNatural<1>>,
+    NumberToNatural<1>
+  >
+>(true);
+assert<
+  IsExact<
+    AddNatural<NumberToNatural<1>, NumberToNatural<0>>,
+    NumberToNatural<1>
+  >
+>(true);
+assert<
+  IsExact<
+    AddNatural<NumberToNatural<3>, NumberToNatural<2>>,
+    NumberToNatural<5>
+  >
+>(true);
+assert<
+  IsExact<
+    AddNatural<NumberToNatural<100>, NumberToNatural<50>>,
+    NumberToNatural<150>
+  >
+>(true);
+
+assert<
+  IsExact<
+    SubNatural<NumberToNatural<0>, NumberToNatural<0>>,
+    NumberToNatural<0>
+  >
+>(true);
+assert<
+  IsExact<
+    SubNatural<NumberToNatural<3>, NumberToNatural<2>>,
+    NumberToNatural<1>
+  >
+>(true);
+assert<
+  IsExact<
+    SubNatural<NumberToNatural<100>, NumberToNatural<50>>,
+    NumberToNatural<50>
+  >
+>(true);
+assert<IsException<SubNatural<NumberToNatural<50>, NumberToNatural<51>>>>(true);
 
 assert<IsExact<NumberToNatural<0>, []>>(true);
 assert<IsExact<NumberToNatural<1>, [1]>>(true);

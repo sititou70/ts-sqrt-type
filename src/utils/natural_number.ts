@@ -10,6 +10,18 @@ export type Pred<n extends Natural> = n extends [1, ...infer rest]
   ? Cast<rest, Natural>
   : Exception<'result is negative number!'>;
 
+export type AddNatural<n1 extends Natural, n2 extends Natural> = [...n1, ...n2];
+
+export type SubNatural<n1 extends Natural, n2 extends Natural> = ExtractResult<
+  _SubNatural<n1, n2>
+>;
+export type _SubNatural<n1 extends Natural | Exception, n2 extends Natural> =
+  n2 extends NumberToNatural<0>
+    ? n1
+    : n1 extends Natural
+    ? { _: _SubNatural<Pred<n1>, Cast<Pred<n2>, Natural>> }
+    : n1;
+
 export type NumberToNatural<n extends number> = Cast<
   ExtractResult<_NumberToNatural<[], n>>,
   Natural
