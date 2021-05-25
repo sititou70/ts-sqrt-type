@@ -8,6 +8,7 @@ import {
   Succ,
 } from '../utils/natural_number';
 import { ExtractResult } from '../utils/result_container';
+import { MatchBitLength } from './utils';
 
 export type AdderResult<c extends Bit = Bit, s extends Bit = Bit> = {
   carry_out: c;
@@ -36,11 +37,9 @@ export type BitsAdderResult<
   carry_out: carry_out;
 };
 export type BitsAdder<b1 extends Bits, b2 extends Bits> = Cast<
-  b1['length'] extends b2['length']
-    ? ExtractResult<
-        _AdderRecursive1<[], 0, NumberToNatural<0>, { b1: b1; b2: b2 }>
-      >
-    : Exception<'BitsAdder: length of b1 and b2 must be equal'>,
+  ExtractResult<
+    _AdderRecursive1<[], 0, NumberToNatural<0>, MatchBitLength<b1, b2>>
+  >,
   BitsAdderResult | Exception
 >;
 type _AdderRecursive1<

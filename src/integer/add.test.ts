@@ -2,11 +2,12 @@ import { assert, IsExact } from 'conditional-type-checks';
 import { IsException } from '../utils/exception';
 import { Add } from './add';
 
-assert<IsException<Add<[1, 0], [1, 0, 0]>>>(true);
 assert<IsException<Add<[1, 1], [1, 0]>>>(true);
 
 // 1 + 1 = 2
 assert<IsExact<Add<[1, 0], [1, 0]>, [0, 1]>>(true);
+assert<IsExact<Add<[1, 0], [1, 0, 0]>, [0, 1, 0]>>(true);
+assert<IsExact<Add<[1, 0, 0], [1, 0]>, [0, 1, 0]>>(true);
 // 3 + 1 = 4
 assert<IsExact<Add<[1, 1, 0], [1, 0, 0]>, [0, 0, 1]>>(true);
 // 12345 + 67890 = 80235

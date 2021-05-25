@@ -115,18 +115,28 @@ export type _LeftShift<
   ? bits
   : { _: _LeftShift<LeftShift1<bits>, Succ<cnt>, num> };
 
-export type ZeroPadding<bits extends Bits, num extends number> = SubNatural<
-  NumberToNatural<num>,
-  NumberToNatural<bits['length']>
-> extends Exception
-  ? bits
-  : ExtractResult<_ZeroPadding<bits, num>>;
+export type ZeroPadding<bits extends Bits, num extends number> = Cast<
+  SubNatural<
+    NumberToNatural<num>,
+    NumberToNatural<bits['length']>
+  > extends Exception
+    ? bits
+    : ExtractResult<_ZeroPadding<bits, num>>,
+  Bits
+>;
 export type _ZeroPadding<bits extends Bits, num extends number> =
   bits['length'] extends num ? bits : { _: _ZeroPadding<[...bits, 0], num> };
 
-export type MatchBitLength<b1 extends Bits, b2 extends Bits> = SubNatural<
-  NumberToNatural<b1['length']>,
-  NumberToNatural<b2['length']>
-> extends Exception
-  ? { b1: ZeroPadding<b1, b2['length']>; b2: b2 }
-  : { b1: b1; b2: ZeroPadding<b2, b1['length']> };
+export type MatchBitLengthResult<
+  b1 extends Bits = Bits,
+  b2 extends Bits = Bits
+> = { b1: b1; b2: b2 };
+export type MatchBitLength<b1 extends Bits, b2 extends Bits> = Cast<
+  SubNatural<
+    NumberToNatural<b1['length']>,
+    NumberToNatural<b2['length']>
+  > extends Exception
+    ? MatchBitLengthResult<ZeroPadding<b1, b2['length']>, b2>
+    : MatchBitLengthResult<b1, ZeroPadding<b2, b1['length']>>,
+  MatchBitLengthResult
+>;
