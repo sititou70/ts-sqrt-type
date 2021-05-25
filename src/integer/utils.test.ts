@@ -1,5 +1,6 @@
 import { assert, IsExact } from 'conditional-type-checks';
-import { Complement } from './utils';
+import { IsException } from '../utils/exception';
+import { CompareUint, Complement } from './utils';
 
 // 0bit
 assert<IsExact<Complement<[]>, []>>(true);
@@ -15,3 +16,13 @@ assert<IsExact<Complement<[0, 0, 1, 0]>, [0, 0, 1, 1]>>(true);
 assert<IsExact<Complement<[0, 0, 1, 0, 0, 1, 0, 0]>, [0, 0, 1, 1, 1, 0, 1, 1]>>(
   true
 );
+
+assert<IsException<CompareUint<[], []>>>(true);
+assert<IsException<CompareUint<[1], []>>>(true);
+assert<IsException<CompareUint<[1], [0, 0]>>>(true);
+// 10 > 9 -> 1
+assert<IsExact<CompareUint<[0, 1, 0, 1], [1, 0, 0, 1]>, 1>>(true);
+// 10 < 11 -> -1
+assert<IsExact<CompareUint<[0, 1, 0, 1], [1, 1, 0, 1]>, -1>>(true);
+// 10 = 10 -> 0
+assert<IsExact<CompareUint<[0, 1, 0, 1], [0, 1, 0, 1]>, 0>>(true);
