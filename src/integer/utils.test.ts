@@ -1,7 +1,13 @@
 import { assert, IsExact } from 'conditional-type-checks';
 import { IsException } from '../utils/exception';
 import { NumberToNatural } from '../utils/natural_number';
-import { CompareUint, Complement, LeftShift, RightShift } from './utils';
+import {
+  CompareUint,
+  Complement,
+  LeftShift,
+  RightShift,
+  ZeroPadding,
+} from './utils';
 
 // 0bit
 assert<IsExact<Complement<[]>, []>>(true);
@@ -53,3 +59,9 @@ assert<
 >(true);
 assert<IsExact<LeftShift<[], NumberToNatural<1>>, [0]>>(true);
 assert<IsExact<LeftShift<[], NumberToNatural<2>>, [0, 0]>>(true);
+
+assert<IsExact<ZeroPadding<[], 2>, [0, 0]>>(true);
+assert<IsExact<ZeroPadding<[1, 0, 0], 0>, [1, 0, 0]>>(true);
+assert<IsExact<ZeroPadding<[1, 0, 0], 2>, [1, 0, 0]>>(true);
+assert<IsExact<ZeroPadding<[1, 0, 0], 3>, [1, 0, 0]>>(true);
+assert<IsExact<ZeroPadding<[1, 0, 0], 4>, [1, 0, 0, 0]>>(true);

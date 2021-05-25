@@ -5,6 +5,7 @@ import {
   NaturalToNumber,
   NumberToNatural,
   Pred,
+  SubNatural,
   Succ,
 } from '../utils/natural_number';
 import { ExtractResult } from '../utils/result_container';
@@ -113,3 +114,12 @@ export type _LeftShift<
 > = cnt extends num
   ? bits
   : { _: _LeftShift<LeftShift1<bits>, Succ<cnt>, num> };
+
+export type ZeroPadding<bits extends Bits, num extends number> = SubNatural<
+  NumberToNatural<num>,
+  NumberToNatural<bits['length']>
+> extends Exception
+  ? bits
+  : ExtractResult<_ZeroPadding<bits, num>>;
+export type _ZeroPadding<bits extends Bits, num extends number> =
+  bits['length'] extends num ? bits : { _: _ZeroPadding<[...bits, 0], num> };
