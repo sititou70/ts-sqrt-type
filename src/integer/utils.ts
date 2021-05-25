@@ -1,4 +1,4 @@
-import { Bits } from '../model';
+import { Bit, Bits } from '../model';
 import { CompareBit, Not } from '../bit/basic_operation';
 import {
   Natural,
@@ -83,3 +83,33 @@ type _CompareUint3<
 > = compare_bit_desult extends 0
   ? { _: _CompareUint2<Pred<index>, consts> }
   : compare_bit_desult;
+
+// 0b1100 -> 0b110 <=> [0, 0, 1, 1] -> [0, 1, 1]
+export type RightShift1<bits extends Bits> = bits extends [
+  infer _,
+  ...infer tail
+]
+  ? tail
+  : [];
+export type RightShift<bits extends Bits, num extends Natural> = ExtractResult<
+  _RightShift<bits, NumberToNatural<0>, num>
+>;
+export type _RightShift<
+  bits extends Bits,
+  cnt extends Natural,
+  num extends Natural
+> = cnt extends num
+  ? bits
+  : { _: _RightShift<RightShift1<bits>, Succ<cnt>, num> };
+
+export type LeftShift1<bits extends Bits> = [0, ...bits];
+export type LeftShift<bits extends Bits, num extends Natural> = ExtractResult<
+  _LeftShift<bits, NumberToNatural<0>, num>
+>;
+export type _LeftShift<
+  bits extends Bits,
+  cnt extends Natural,
+  num extends Natural
+> = cnt extends num
+  ? bits
+  : { _: _LeftShift<LeftShift1<bits>, Succ<cnt>, num> };

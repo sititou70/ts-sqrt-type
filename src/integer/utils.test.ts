@@ -1,6 +1,7 @@
 import { assert, IsExact } from 'conditional-type-checks';
 import { IsException } from '../utils/exception';
-import { CompareUint, Complement } from './utils';
+import { NumberToNatural } from '../utils/natural_number';
+import { CompareUint, Complement, LeftShift, RightShift } from './utils';
 
 // 0bit
 assert<IsExact<Complement<[]>, []>>(true);
@@ -26,3 +27,29 @@ assert<IsExact<CompareUint<[0, 1, 0, 1], [1, 0, 0, 1]>, 1>>(true);
 assert<IsExact<CompareUint<[0, 1, 0, 1], [1, 1, 0, 1]>, -1>>(true);
 // 10 = 10 -> 0
 assert<IsExact<CompareUint<[0, 1, 0, 1], [0, 1, 0, 1]>, 0>>(true);
+
+assert<IsExact<RightShift<[0, 1, 0, 1], NumberToNatural<0>>, [0, 1, 0, 1]>>(
+  true
+);
+assert<IsExact<RightShift<[0, 1, 0, 1], NumberToNatural<1>>, [1, 0, 1]>>(true);
+assert<IsExact<RightShift<[0, 1, 0, 1], NumberToNatural<2>>, [0, 1]>>(true);
+assert<IsExact<RightShift<[0, 1, 0, 1], NumberToNatural<3>>, [1]>>(true);
+assert<IsExact<RightShift<[0, 1, 0, 1], NumberToNatural<4>>, []>>(true);
+assert<IsExact<RightShift<[0, 1, 0, 1], NumberToNatural<5>>, []>>(true);
+assert<IsExact<RightShift<[], NumberToNatural<1>>, []>>(true);
+assert<IsExact<RightShift<[], NumberToNatural<0>>, []>>(true);
+
+assert<IsExact<LeftShift<[0, 1, 0, 1], NumberToNatural<0>>, [0, 1, 0, 1]>>(
+  true
+);
+assert<IsExact<LeftShift<[0, 1, 0, 1], NumberToNatural<1>>, [0, 0, 1, 0, 1]>>(
+  true
+);
+assert<
+  IsExact<LeftShift<[0, 1, 0, 1], NumberToNatural<2>>, [0, 0, 0, 1, 0, 1]>
+>(true);
+assert<
+  IsExact<LeftShift<[0, 1, 0, 1], NumberToNatural<3>>, [0, 0, 0, 0, 1, 0, 1]>
+>(true);
+assert<IsExact<LeftShift<[], NumberToNatural<1>>, [0]>>(true);
+assert<IsExact<LeftShift<[], NumberToNatural<2>>, [0, 0]>>(true);
