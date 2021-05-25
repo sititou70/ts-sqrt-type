@@ -5,6 +5,7 @@ import {
   CompareUint,
   Complement,
   LeftShift,
+  MatchBitLength,
   RightShift,
   ZeroPadding,
 } from './utils';
@@ -65,3 +66,19 @@ assert<IsExact<ZeroPadding<[1, 0, 0], 0>, [1, 0, 0]>>(true);
 assert<IsExact<ZeroPadding<[1, 0, 0], 2>, [1, 0, 0]>>(true);
 assert<IsExact<ZeroPadding<[1, 0, 0], 3>, [1, 0, 0]>>(true);
 assert<IsExact<ZeroPadding<[1, 0, 0], 4>, [1, 0, 0, 0]>>(true);
+
+assert<
+  IsExact<MatchBitLength<[1, 0, 0], [0, 0]>, { b1: [1, 0, 0]; b2: [0, 0, 0] }>
+>(true);
+assert<
+  IsExact<
+    MatchBitLength<[1, 0, 1], [1, 0, 0, 1, 0, 1]>,
+    { b1: [1, 0, 1, 0, 0, 0]; b2: [1, 0, 0, 1, 0, 1] }
+  >
+>(true);
+assert<
+  IsExact<
+    MatchBitLength<[1, 0, 1], [1, 0, 1]>,
+    { b1: [1, 0, 1]; b2: [1, 0, 1] }
+  >
+>(true);

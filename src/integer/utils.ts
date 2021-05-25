@@ -123,3 +123,10 @@ export type ZeroPadding<bits extends Bits, num extends number> = SubNatural<
   : ExtractResult<_ZeroPadding<bits, num>>;
 export type _ZeroPadding<bits extends Bits, num extends number> =
   bits['length'] extends num ? bits : { _: _ZeroPadding<[...bits, 0], num> };
+
+export type MatchBitLength<b1 extends Bits, b2 extends Bits> = SubNatural<
+  NumberToNatural<b1['length']>,
+  NumberToNatural<b2['length']>
+> extends Exception
+  ? { b1: ZeroPadding<b1, b2['length']>; b2: b2 }
+  : { b1: b1; b2: ZeroPadding<b2, b1['length']> };
