@@ -6,6 +6,12 @@ export type Or<b1 extends Bit, b2 extends Bit> = b1 extends 0
     : 1
   : 1;
 
+export type And<b1 extends Bit, b2 extends Bit> = b1 extends 1
+  ? b2 extends 1
+    ? 1
+    : 0
+  : 0;
+
 export type Not<bit extends Bit> = bit extends 0 ? 1 : 0;
 
 // if:

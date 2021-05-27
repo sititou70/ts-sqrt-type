@@ -25,15 +25,18 @@ assert<IsExact<Complement<[0, 0, 1, 0, 0, 1, 0, 0]>, [0, 0, 1, 1, 1, 0, 1, 1]>>(
   true
 );
 
-assert<IsException<CompareUint<[], []>>>(true);
-assert<IsException<CompareUint<[1], []>>>(true);
-assert<IsException<CompareUint<[1], [0, 0]>>>(true);
+assert<IsExact<CompareUint<[], []>, 0>>(true);
+// 1 > 0 -> 1
+assert<IsExact<CompareUint<[1], []>, 1>>(true);
+assert<IsExact<CompareUint<[1], [0, 0]>, 1>>(true);
 // 10 > 9 -> 1
 assert<IsExact<CompareUint<[0, 1, 0, 1], [1, 0, 0, 1]>, 1>>(true);
 // 10 < 11 -> -1
 assert<IsExact<CompareUint<[0, 1, 0, 1], [1, 1, 0, 1]>, -1>>(true);
 // 10 = 10 -> 0
 assert<IsExact<CompareUint<[0, 1, 0, 1], [0, 1, 0, 1]>, 0>>(true);
+// 3 < 48 -> -1
+assert<IsExact<CompareUint<[1, 1], [0, 0, 0, 0, 1, 1]>, -1>>(true);
 
 assert<IsExact<RightShift<[0, 1, 0, 1], NumberToNatural<0>>, [0, 1, 0, 1]>>(
   true
@@ -69,6 +72,12 @@ assert<IsExact<ZeroPadding<[1, 0, 0], 4>, [1, 0, 0, 0]>>(true);
 
 assert<
   IsExact<MatchBitLength<[1, 0, 0], [0, 0]>, { b1: [1, 0, 0]; b2: [0, 0, 0] }>
+>(true);
+assert<
+  IsExact<
+    MatchBitLength<[1, 1], [0, 0, 0, 0, 1, 1]>,
+    { b1: [1, 1, 0, 0, 0, 0]; b2: [0, 0, 0, 0, 1, 1] }
+  >
 >(true);
 assert<
   IsExact<

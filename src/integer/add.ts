@@ -40,7 +40,7 @@ export type BitsAdder<b1 extends Bits, b2 extends Bits> = Cast<
   ExtractResult<
     _AdderRecursive1<[], 0, NumberToNatural<0>, MatchBitLength<b1, b2>>
   >,
-  BitsAdderResult | Exception
+  BitsAdderResult
 >;
 type _AdderRecursive1<
   result extends Bits,
@@ -76,7 +76,7 @@ type _AdderRecursive2<
 };
 
 export type Add<b1 extends Bits, b2 extends Bits> = _Add2<BitsAdder<b1, b2>>;
-type _Add2<adder_result extends BitsAdderResult | Exception> =
+type _Add2<adder_result extends BitsAdderResult> =
   adder_result extends BitsAdderResult
     ? adder_result['carry_out'] extends 1
       ? Exception<'Add: overflow occurred'>

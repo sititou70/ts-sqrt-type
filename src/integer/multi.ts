@@ -12,6 +12,7 @@ import { LeftShift, LeftShift1 } from './utils';
 import { Add } from './add';
 import { Exception } from '../utils/exception';
 
+// result["length"] === b1["length"] + b2["length"]
 export type Multi<b1 extends Bits, b2 extends Bits> = Or<
   b1 extends [] ? 1 : 0,
   b2 extends [] ? 1 : 0

@@ -1,5 +1,5 @@
 import { Bit, Bits } from '../model';
-import { CompareBit, Not } from '../bit/basic_operation';
+import { And, CompareBit, Not } from '../bit/basic_operation';
 import {
   Natural,
   NaturalToNumber,
@@ -54,20 +54,21 @@ type _Complement<
 //   b1 > b2 -> 1
 //   b1 < b2 -> -1
 //   b1 = b2 -> 0
-export type CompareUint<b1 extends Bits, b2 extends Bits> =
-  b1['length'] extends b2['length']
-    ? b1['length'] extends 0
-      ? Exception<'CompareUint: length of b1 and b2 are 0'>
-      : ExtractResult<
-          _CompareUint2<Pred<NumberToNatural<b1['length']>>, { b1: b1; b2: b2 }>
-        >
-    : Exception<'CompareUint: length of b1 and b2 must be equal'>;
-type _CompareUint2<
+export type CompareUint<b1 extends Bits, b2 extends Bits> = And<
+  b1 extends [] ? 1 : 0,
+  b2 extends [] ? 1 : 0
+> extends 1
+  ? 0
+  : Cast<ExtractResult<_CompareUint2<MatchBitLength<b1, b2>>>, 1 | 0 | -1>;
+type _CompareUint2<consts extends { b1: Bits; b2: Bits }> = {
+  _: _CompareUint3<Pred<NumberToNatural<consts['b1']['length']>>, consts>;
+};
+type _CompareUint3<
   index extends Natural | Exception,
   consts extends { b1: Bits; b2: Bits }
 > = index extends Natural
   ? {
-      _: _CompareUint3<
+      _: _CompareUint4<
         index,
         CompareBit<
           consts['b1'][NaturalToNumber<index>],
@@ -77,13 +78,13 @@ type _CompareUint2<
       >;
     }
   : 0;
-type _CompareUint3<
+type _CompareUint4<
   index extends Natural,
-  compare_bit_desult extends number,
+  compare_bit_result extends number,
   consts extends { b1: Bits; b2: Bits }
-> = compare_bit_desult extends 0
-  ? { _: _CompareUint2<Pred<index>, consts> }
-  : compare_bit_desult;
+> = compare_bit_result extends 0
+  ? { _: _CompareUint3<Pred<index>, consts> }
+  : compare_bit_result;
 
 // 0b1100 -> 0b110 <=> [0, 0, 1, 1] -> [0, 1, 1]
 export type RightShift1<bits extends Bits> = bits extends [
