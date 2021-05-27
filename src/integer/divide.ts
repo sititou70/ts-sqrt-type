@@ -6,13 +6,13 @@ import { ExtractResult } from '../utils/result_container';
 import { Sub } from './sub';
 import { CompareUint, LeftShift, MatchBitLength, RightShift1 } from './utils';
 
-export type Divide<b1 extends Bits, b2 extends Bits> = b2 extends 0[]
+export type DivideUint<b1 extends Bits, b2 extends Bits> = b2 extends 0[]
   ? Exception<'Divide: divide by zero'>
   : b1 extends 0[]
   ? b1
   : {
       1: ExtractResult<
-        _Divide<
+        _DivideUint<
           [],
           b1,
           Cast<
@@ -33,7 +33,7 @@ export type Divide<b1 extends Bits, b2 extends Bits> = b2 extends 0[]
       0: MatchBitLength<b1, [1]>['b2'];
       [-1]: MatchBitLength<b1, [0]>['b2'];
     }[CompareUint<b1, b2>];
-type _Divide<
+type _DivideUint<
   result extends Bits,
   rest_of_b1 extends Bits,
   shifted_b2 extends Bits,
@@ -44,8 +44,13 @@ type _Divide<
   ? result
   : {
       _: CompareUint<rest_of_b1, shifted_b2> extends -1
-        ? _Divide<[0, ...result], rest_of_b1, RightShift1<shifted_b2>, consts>
-        : _Divide<
+        ? _DivideUint<
+            [0, ...result],
+            rest_of_b1,
+            RightShift1<shifted_b2>,
+            consts
+          >
+        : _DivideUint<
             [1, ...result],
             Sub<rest_of_b1, shifted_b2>,
             RightShift1<shifted_b2>,

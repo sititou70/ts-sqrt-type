@@ -13,13 +13,13 @@ import { Add } from './add';
 import { Exception } from '../utils/exception';
 
 // result["length"] === b1["length"] + b2["length"]
-export type Multi<b1 extends Bits, b2 extends Bits> = Or<
+export type MultiUint<b1 extends Bits, b2 extends Bits> = Or<
   b1 extends [] ? 1 : 0,
   b2 extends [] ? 1 : 0
 > extends 1
   ? []
   : ExtractResult<
-      _Multi<
+      _MultiUint<
         LeftShift<
           [],
           AddNatural<
@@ -32,7 +32,7 @@ export type Multi<b1 extends Bits, b2 extends Bits> = Or<
         { b2: b2 }
       >
     >;
-type _Multi<
+type _MultiUint<
   result extends Bits | Exception,
   index extends Natural,
   shifted_b1 extends Bits,
@@ -42,7 +42,7 @@ type _Multi<
     ? result
     : consts['b2'][NaturalToNumber<index>] extends 1
     ? {
-        _: _Multi<
+        _: _MultiUint<
           Add<result, shifted_b1>,
           Succ<index>,
           LeftShift1<shifted_b1>,
@@ -50,6 +50,6 @@ type _Multi<
         >;
       }
     : {
-        _: _Multi<result, Succ<index>, LeftShift1<shifted_b1>, consts>;
+        _: _MultiUint<result, Succ<index>, LeftShift1<shifted_b1>, consts>;
       }
   : never;
