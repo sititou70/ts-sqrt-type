@@ -4,15 +4,22 @@ import { Exception } from '../utils/exception';
 import { Natural, NumberToNatural, SubNatural } from '../utils/natural_number';
 import { ExtractResult } from '../utils/result_container';
 import { Sub } from './sub';
-import { CompareUint, LeftShift, MatchBitLength, RightShift1 } from './utils';
+import { CompareUint, LeftShift, RightShift1 } from './utils';
 
-export type DivideUint<b1 extends Bits, b2 extends Bits> = b2 extends 0[]
+export type DivideAndModUintResult<
+  result extends Bits = Bits,
+  mod extends Bits = Bits
+> = {
+  result: result;
+  mod: mod;
+};
+export type DivideAndModUint<b1 extends Bits, b2 extends Bits> = b2 extends 0[]
   ? Exception<'Divide: divide by zero'>
   : b1 extends 0[]
-  ? b1
+  ? DivideAndModUintResult<b1, [0]>
   : {
       1: ExtractResult<
-        _DivideUint<
+        _DivideAndModUint<
           [],
           b1,
           Cast<
@@ -30,30 +37,50 @@ export type DivideUint<b1 extends Bits, b2 extends Bits> = b2 extends 0[]
           { b1: b1; b2: b2 }
         >
       >;
-      0: MatchBitLength<b1, [1]>['b2'];
-      [-1]: MatchBitLength<b1, [0]>['b2'];
+      0: DivideAndModUintResult<[1], [0]>;
+      [-1]: DivideAndModUintResult<[0], b1>;
     }[CompareUint<b1, b2>];
-type _DivideUint<
+type _DivideAndModUint<
   result extends Bits,
   rest_of_b1 extends Bits,
   shifted_b2 extends Bits,
   consts extends { b1: Bits; b2: Bits }
-> = shifted_b2 extends []
-  ? result
-  : CompareUint<consts['b2'], shifted_b2> extends 1
-  ? result
+> = CompareUint<consts['b2'], shifted_b2> extends 1
+  ? DivideAndModUintResult<result, rest_of_b1>
   : {
       _: CompareUint<rest_of_b1, shifted_b2> extends -1
-        ? _DivideUint<
+        ? _DivideAndModUint<
             [0, ...result],
             rest_of_b1,
             RightShift1<shifted_b2>,
             consts
           >
-        : _DivideUint<
+        : _DivideAndModUint<
             [1, ...result],
             Sub<rest_of_b1, shifted_b2>,
             RightShift1<shifted_b2>,
             consts
           >;
     };
+
+export type DivideUint<b1 extends Bits, b2 extends Bits> = _DivideUint<
+  DivideAndModUint<b1, b2> extends infer A
+    ? Cast<A, DivideAndModUintResult | Exception>
+    : never
+>;
+type _DivideUint<
+  divide_and_mod_result extends DivideAndModUintResult | Exception
+> = divide_and_mod_result extends DivideAndModUintResult
+  ? divide_and_mod_result['result']
+  : divide_and_mod_result;
+
+export type ModUint<b1 extends Bits, b2 extends Bits> = _ModUint<
+  DivideAndModUint<b1, b2> extends infer A
+    ? Cast<A, DivideAndModUintResult | Exception>
+    : never
+>;
+type _ModUint<
+  divide_and_mod_result extends DivideAndModUintResult | Exception
+> = divide_and_mod_result extends DivideAndModUintResult
+  ? divide_and_mod_result['mod']
+  : divide_and_mod_result;

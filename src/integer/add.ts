@@ -77,8 +77,6 @@ type _AdderRecursive2<
 
 export type Add<b1 extends Bits, b2 extends Bits> = _Add2<BitsAdder<b1, b2>>;
 type _Add2<adder_result extends BitsAdderResult> =
-  adder_result extends BitsAdderResult
-    ? adder_result['carry_out'] extends 1
-      ? Exception<'Add: overflow occurred'>
-      : adder_result['sum']
-    : adder_result;
+  adder_result['carry_out'] extends 1
+    ? [...adder_result['sum'], 1]
+    : adder_result['sum'];

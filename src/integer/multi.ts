@@ -33,23 +33,21 @@ export type MultiUint<b1 extends Bits, b2 extends Bits> = Or<
       >
     >;
 type _MultiUint<
-  result extends Bits | Exception,
+  result extends Bits,
   index extends Natural,
   shifted_b1 extends Bits,
   consts extends { b2: Bits }
-> = result extends Bits
-  ? NaturalToNumber<index> extends consts['b2']['length']
-    ? result
-    : consts['b2'][NaturalToNumber<index>] extends 1
-    ? {
-        _: _MultiUint<
-          Add<result, shifted_b1>,
-          Succ<index>,
-          LeftShift1<shifted_b1>,
-          consts
-        >;
-      }
-    : {
-        _: _MultiUint<result, Succ<index>, LeftShift1<shifted_b1>, consts>;
-      }
-  : never;
+> = NaturalToNumber<index> extends consts['b2']['length']
+  ? result
+  : consts['b2'][NaturalToNumber<index>] extends 1
+  ? {
+      _: _MultiUint<
+        Add<result, shifted_b1>,
+        Succ<index>,
+        LeftShift1<shifted_b1>,
+        consts
+      >;
+    }
+  : {
+      _: _MultiUint<result, Succ<index>, LeftShift1<shifted_b1>, consts>;
+    };
