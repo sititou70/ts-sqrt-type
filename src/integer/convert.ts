@@ -2,9 +2,10 @@ import { Bits } from '../model';
 import { Cast } from '../utils/cast';
 import { Exception } from '../utils/exception';
 import { ExtractResult } from '../utils/result_container';
+import { Add } from './add';
 import { DivideAndModUint, DivideAndModUintResult } from './divide';
 import { MultiUint } from './multi';
-import { CompareUint, MatchBitLength } from './utils';
+import { MatchBitLength } from './utils';
 
 // [1, 1, 0, 0] -> "1100" -> "3"
 type UintToDigit10Map = {
@@ -67,3 +68,65 @@ type _UintToStr3<
       _: _UintToStr<`${to_digit10_result}${result}`, divide_result['result']>;
     }
   : '_UintToStr3: never';
+
+type Digit10Str = '0' | '1' | '2' | '3' | '4' | '5' | '6' | '7' | '8' | '9';
+type Digit10StrToUint = {
+  '0': [0, 0, 0, 0];
+  '1': [1, 0, 0, 0];
+  '2': [0, 1, 0, 0];
+  '3': [1, 1, 0, 0];
+  '4': [0, 0, 1, 0];
+  '5': [1, 0, 1, 0];
+  '6': [0, 1, 1, 0];
+  '7': [1, 1, 1, 0];
+  '8': [0, 0, 0, 1];
+  '9': [1, 0, 0, 1];
+};
+
+type GetLastDigit10Result<
+  rest extends string = string,
+  last extends Digit10Str = Digit10Str
+> = { rest: rest; last: last };
+// prettier-ignore
+export type GetLastDigit10<str extends string> =
+  str extends `${infer rest}0` ? GetLastDigit10Result<rest, '0'> :
+  str extends `${infer rest}1` ? GetLastDigit10Result<rest, '1'> :
+  str extends `${infer rest}2` ? GetLastDigit10Result<rest, '2'> :
+  str extends `${infer rest}3` ? GetLastDigit10Result<rest, '3'> :
+  str extends `${infer rest}4` ? GetLastDigit10Result<rest, '4'> :
+  str extends `${infer rest}5` ? GetLastDigit10Result<rest, '5'> :
+  str extends `${infer rest}6` ? GetLastDigit10Result<rest, '6'> :
+  str extends `${infer rest}7` ? GetLastDigit10Result<rest, '7'> :
+  str extends `${infer rest}8` ? GetLastDigit10Result<rest, '8'> :
+  str extends `${infer rest}9` ? GetLastDigit10Result<rest, '9'> :
+  Exception<`GetLastDigit10: unexpected syntax: '${str}'`>;
+
+export type StrToUint<str extends string> = ExtractResult<
+  _StrToUint<[0], [1], str>
+>;
+type _StrToUint<
+  result extends Bits,
+  current_weight extends Bits,
+  rest_of_str extends string
+> = rest_of_str extends ''
+  ? result
+  : { _: _StrToUint2<result, current_weight, GetLastDigit10<rest_of_str>> };
+type _StrToUint2<
+  result extends Bits,
+  current_weight extends Bits,
+  get_last_str_result extends GetLastDigit10Result | Exception
+> = get_last_str_result extends GetLastDigit10Result
+  ? {
+      _: _StrToUint<
+        Add<
+          result,
+          MultiUint<
+            Digit10StrToUint[get_last_str_result['last']],
+            current_weight
+          >
+        >,
+        MultiUint<current_weight, Ten> extends infer A ? Cast<A, Bits> : never,
+        get_last_str_result['rest']
+      >;
+    }
+  : get_last_str_result;

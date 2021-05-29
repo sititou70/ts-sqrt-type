@@ -36,12 +36,11 @@ export type BitsAdderResult<
   sum: sum;
   carry_out: carry_out;
 };
-export type BitsAdder<b1 extends Bits, b2 extends Bits> = Cast<
-  ExtractResult<
-    _AdderRecursive1<[], 0, NumberToNatural<0>, MatchBitLength<b1, b2>>
-  >,
-  BitsAdderResult
->;
+export type BitsAdder<b1 extends Bits, b2 extends Bits> = ExtractResult<
+  _AdderRecursive1<[], 0, NumberToNatural<0>, MatchBitLength<b1, b2>>
+> extends infer A
+  ? Cast<A, BitsAdderResult>
+  : never;
 type _AdderRecursive1<
   result extends Bits,
   carry_in extends Bit,
@@ -75,7 +74,11 @@ type _AdderRecursive2<
   >;
 };
 
-export type Add<b1 extends Bits, b2 extends Bits> = _Add2<BitsAdder<b1, b2>>;
+export type Add<b1 extends Bits, b2 extends Bits> = _Add2<
+  BitsAdder<b1, b2>
+> extends infer A
+  ? Cast<A, Bits>
+  : never;
 type _Add2<adder_result extends BitsAdderResult> =
   adder_result['carry_out'] extends 1
     ? [...adder_result['sum'], 1]

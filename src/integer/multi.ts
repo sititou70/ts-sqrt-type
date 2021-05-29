@@ -10,7 +10,7 @@ import {
 import { ExtractResult } from '../utils/result_container';
 import { LeftShift, LeftShift1 } from './utils';
 import { Add } from './add';
-import { Exception } from '../utils/exception';
+import { Cast } from '../utils/cast';
 
 // result["length"] === b1["length"] + b2["length"]
 export type MultiUint<b1 extends Bits, b2 extends Bits> = Or<
@@ -31,7 +31,9 @@ export type MultiUint<b1 extends Bits, b2 extends Bits> = Or<
         b1,
         { b2: b2 }
       >
-    >;
+    > extends infer A
+  ? Cast<A, Bits>
+  : never;
 type _MultiUint<
   result extends Bits,
   index extends Natural,
