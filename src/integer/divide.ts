@@ -62,25 +62,3 @@ type _DivideAndModUint<
             consts
           >;
     };
-
-export type DivideUint<b1 extends Bits, b2 extends Bits> = _DivideUint<
-  DivideAndModUint<b1, b2> extends infer A
-    ? Cast<A, DivideAndModUintResult | Exception>
-    : never
->;
-type _DivideUint<
-  divide_and_mod_result extends DivideAndModUintResult | Exception
-> = divide_and_mod_result extends DivideAndModUintResult
-  ? divide_and_mod_result['result']
-  : divide_and_mod_result;
-
-export type ModUint<b1 extends Bits, b2 extends Bits> = _ModUint<
-  DivideAndModUint<b1, b2> extends infer A
-    ? Cast<A, DivideAndModUintResult | Exception>
-    : never
->;
-type _ModUint<
-  divide_and_mod_result extends DivideAndModUintResult | Exception
-> = divide_and_mod_result extends DivideAndModUintResult
-  ? divide_and_mod_result['mod']
-  : divide_and_mod_result;
