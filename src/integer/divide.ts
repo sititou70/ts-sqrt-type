@@ -3,7 +3,7 @@ import { Cast } from '../utils/cast';
 import { Exception } from '../utils/exception';
 import { Natural, NumberToNatural, SubNatural } from '../utils/natural_number';
 import { ExtractResult } from '../utils/result_container';
-import { Sub } from './sub';
+import { SubInt } from './sub';
 import { CompareUint, LeftShift, RightShift1 } from './utils';
 
 export type DivideAndModUintResult<
@@ -57,7 +57,7 @@ type _DivideAndModUint<
           >
         : _DivideAndModUint<
             [1, ...result],
-            Sub<rest_of_b1, shifted_b2>,
+            SubInt<rest_of_b1, shifted_b2>,
             RightShift1<shifted_b2>,
             consts
           >;

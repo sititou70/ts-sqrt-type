@@ -1,19 +1,19 @@
 import { assert, IsExact } from 'conditional-type-checks';
-import { Add } from './add';
+import { AddInt } from './add';
 
 // overflow test
-assert<IsExact<Add<[1, 1], [1, 0]>, [0, 0, 1]>>(true);
+assert<IsExact<AddInt<[1, 1], [1, 0]>, [0, 0, 1]>>(true);
 
 // 1 + 1 = 2
-assert<IsExact<Add<[1, 0], [1, 0]>, [0, 1]>>(true);
-assert<IsExact<Add<[1, 0], [1, 0, 0]>, [0, 1, 0]>>(true);
-assert<IsExact<Add<[1, 0, 0], [1, 0]>, [0, 1, 0]>>(true);
+assert<IsExact<AddInt<[1, 0], [1, 0]>, [0, 1]>>(true);
+assert<IsExact<AddInt<[1, 0], [1, 0, 0]>, [0, 1, 0]>>(true);
+assert<IsExact<AddInt<[1, 0, 0], [1, 0]>, [0, 1, 0]>>(true);
 // 3 + 1 = 4
-assert<IsExact<Add<[1, 1, 0], [1, 0, 0]>, [0, 0, 1]>>(true);
+assert<IsExact<AddInt<[1, 1, 0], [1, 0, 0]>, [0, 0, 1]>>(true);
 // 12345 + 67890 = 80235
 assert<
   IsExact<
-    Add<
+    AddInt<
       [1, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0],
       [0, 1, 0, 0, 1, 1, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 1]
     >,
@@ -24,7 +24,7 @@ assert<
 // prettier-ignore
 assert<
   IsExact<
-  Add<
+  AddInt<
       [0,0,0,0,1,0,0,0,0,1,1,1,0,0,0,0,1,0,1,1,0,1,1,1,0,1,1,1,1,0,1,0,1,0,0,1,1,1,0,1,1,1,0,1,1,1,0,1,0,1,1,1,0,0,0,1,1,0],
       [0,0,0,0,1,0,0,0,1,1,1,1,1,0,1,0,0,0,0,0,1,0,1,1,0,0,1,1,0,1,0,1,1,1,0,1,0,0,1,0,1,1,0,1,1,0,0,1,0,1,1,0,1,1,0,1,1,0]
     >,

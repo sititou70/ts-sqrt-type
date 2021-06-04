@@ -9,7 +9,7 @@ import {
 } from '../utils/natural_number';
 import { ExtractResult } from '../utils/result_container';
 import { LeftShift, LeftShift1 } from './utils';
-import { Add } from './add';
+import { AddInt } from './add';
 import { Cast } from '../utils/cast';
 
 // result["length"] === b1["length"] + b2["length"]
@@ -44,7 +44,7 @@ type _MultiUint<
   : consts['b2'][NaturalToNumber<index>] extends 1
   ? {
       _: _MultiUint<
-        Add<result, shifted_b1>,
+        AddInt<result, shifted_b1>,
         Succ<index>,
         LeftShift1<shifted_b1>,
         consts

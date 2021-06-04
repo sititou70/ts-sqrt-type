@@ -2,7 +2,7 @@ import { Bits } from '../model';
 import { Cast } from '../utils/cast';
 import { Exception } from '../utils/exception';
 import { ExtractResult } from '../utils/result_container';
-import { Add } from './add';
+import { AddInt } from './add';
 import { DivideAndModUint, DivideAndModUintResult } from './divide';
 import { MultiUint } from './multi';
 import { MatchBitLength } from './utils';
@@ -118,7 +118,7 @@ type _StrToUint2<
 > = get_last_str_result extends GetLastDigit10Result
   ? {
       _: _StrToUint<
-        Add<
+        AddInt<
           result,
           MultiUint<
             Digit10StrToUint[get_last_str_result['last']],
