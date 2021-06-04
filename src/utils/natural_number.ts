@@ -32,3 +32,16 @@ type _NumberToNatural<natural extends Natural, num extends number> =
     : { _: _NumberToNatural<Succ<natural>, num> };
 
 export type NaturalToNumber<n extends Natural> = n['length'];
+
+// n1 > n2 -> 1
+// n1 = n2 -> 0
+// n1 < n2 -> -1
+export type CompareNatural<n1 extends Natural, n2 extends Natural> =
+  ExtractResult<_CompareNatural<n1, n2>>;
+type _CompareNatural<n1 extends Natural, n2 extends Natural> = n1 extends []
+  ? n2 extends []
+    ? 0
+    : -1
+  : n2 extends []
+  ? 1
+  : { _: _CompareNatural<Cast<Pred<n1>, Natural>, Cast<Pred<n2>, Natural>> };

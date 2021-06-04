@@ -7,6 +7,7 @@ import {
   Pred,
   AddNatural,
   SubNatural,
+  CompareNatural,
 } from './natural_number';
 
 // test data
@@ -104,3 +105,9 @@ assert<IsExact<NaturalToNumber<Natural10>, 10>>(true);
 assert<IsExact<NaturalToNumber<Natural50>, 50>>(true);
 assert<IsExact<NaturalToNumber<Natural100>, 100>>(true);
 assert<IsExact<NaturalToNumber<Natural500>, 500>>(true);
+
+assert<IsExact<CompareNatural<[], []>, 0>>(true);
+assert<IsExact<CompareNatural<[1], []>, 1>>(true);
+assert<IsExact<CompareNatural<[], [1]>, -1>>(true);
+assert<IsExact<CompareNatural<[1, 1, 1], [1, 1]>, 1>>(true);
+assert<IsExact<CompareNatural<[1, 1], [1, 1]>, 0>>(true);
