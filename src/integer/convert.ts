@@ -83,7 +83,7 @@ type Digit10StrToUint = {
   '9': [1, 0, 0, 1];
 };
 
-type GetLastDigit10Result<
+export type GetLastDigit10Result<
   rest extends string = string,
   last extends Digit10Str = Digit10Str
 > = { rest: rest; last: last };
