@@ -19,12 +19,12 @@ type UintToDigit10Map = {
   '1110': '7';
   '0001': '8';
   '1001': '9';
-  '0101': Exception<'UintToDigit10: un expected bits'>;
-  '1101': Exception<'UintToDigit10: un expected bits'>;
-  '0011': Exception<'UintToDigit10: un expected bits'>;
-  '1011': Exception<'UintToDigit10: un expected bits'>;
-  '0111': Exception<'UintToDigit10: un expected bits'>;
-  '1111': Exception<'UintToDigit10: un expected bits'>;
+  '0101': Exception<'UintToDigit10: unexpected bits'>;
+  '1101': Exception<'UintToDigit10: unexpected bits'>;
+  '0011': Exception<'UintToDigit10: unexpected bits'>;
+  '1011': Exception<'UintToDigit10: unexpected bits'>;
+  '0111': Exception<'UintToDigit10: unexpected bits'>;
+  '1111': Exception<'UintToDigit10: unexpected bits'>;
 };
 export type UintToDigit10<bits extends Bits> = _UintToDigit10<
   MatchBitLength<bits, [0, 0, 0, 0]>['b1']
