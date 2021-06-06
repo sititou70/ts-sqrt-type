@@ -1,18 +1,20 @@
 import { FloatToStr } from '../float/convert';
+import { StrToUint } from '../integer/convert';
 import {
   RemoveExtraZerosFloat,
   ShrinkFloatExponentOneDigit,
 } from '../float/utils';
 import { NewtonSqrtStep } from '../sqrt/sqrt';
 import { NumberToNatural } from '../utils/natural_number';
+import { RemoveExtraZerosBits } from '../integer/utils';
 
 type squared_value = {
-  fraction: [1, 1];
+  fraction: RemoveExtraZerosBits<StrToUint<'3'>>;
   exponent: NumberToNatural<0>;
   is_negative: false;
 };
 type initial_value = {
-  fraction: [0, 0, 1, 0, 1];
+  fraction: RemoveExtraZerosBits<StrToUint<'20'>>;
   exponent: NumberToNatural<1>;
   is_negative: false;
 };
