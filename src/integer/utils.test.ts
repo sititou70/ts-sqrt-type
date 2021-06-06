@@ -6,6 +6,7 @@ import {
   Complement,
   LeftShift,
   MatchBitLength,
+  RemoveExtraZerosBits,
   RightShift,
   ZeroPadding,
 } from './utils';
@@ -91,3 +92,8 @@ assert<
     { b1: [1, 0, 1]; b2: [1, 0, 1] }
   >
 >(true);
+
+assert<IsExact<RemoveExtraZerosBits<[0, 0, 0, 0, 0]>, []>>(true);
+assert<IsExact<RemoveExtraZerosBits<[1, 0, 0, 0, 0]>, [1]>>(true);
+assert<IsExact<RemoveExtraZerosBits<[0, 1, 0, 0, 0, 0]>, [0, 1]>>(true);
+assert<IsExact<RemoveExtraZerosBits<[0, 1, 0, 0, 1]>, [0, 1, 0, 0, 1]>>(true);

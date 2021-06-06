@@ -141,3 +141,17 @@ export type MatchBitLength<b1 extends Bits, b2 extends Bits> = Cast<
     : MatchBitLengthResult<b1, ZeroPadding<b2, b1['length']>>,
   MatchBitLengthResult
 >;
+
+export type RemoveExtraZerosBits<bits extends Bits> = ExtractResult<
+  _RemoveExtraZerosBits<bits>
+> extends infer A
+  ? Cast<A, Bits>
+  : never;
+type _RemoveExtraZerosBits<bits extends Bits> = bits extends [
+  ...infer rest,
+  infer msb
+]
+  ? msb extends 1
+    ? [...rest, msb]
+    : { _: _RemoveExtraZerosBits<Cast<rest, Bits>> }
+  : [];
