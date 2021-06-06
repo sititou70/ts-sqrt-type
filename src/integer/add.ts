@@ -73,12 +73,12 @@ type _MultiFullAdder2<
   >;
 };
 
-export type AddInt<b1 extends Bits, b2 extends Bits> = _AddBits<
+export type AddInt<b1 extends Bits, b2 extends Bits> = _AddInt<
   MultiFullAdder<b1, b2>
 > extends infer A
   ? Cast<A, Bits>
   : never;
-type _AddBits<adder_result extends MultiFullAdderResult> =
+type _AddInt<adder_result extends MultiFullAdderResult> =
   adder_result['carry_out'] extends 1
     ? [...adder_result['sum'], 1]
     : adder_result['sum'];
