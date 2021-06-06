@@ -1,5 +1,6 @@
 import { DivideAndModUint, DivideAndModUintResult } from '../integer/divide';
 import { MultiUint } from '../integer/multi';
+import { RemoveExtraZerosBits } from '../integer/utils';
 import { Bits, Float } from '../model';
 import { Cast } from '../utils/cast';
 import { CompareNatural, Natural, Pred, Succ } from '../utils/natural_number';
@@ -46,3 +47,9 @@ type ExpandF2<f1 extends Float, f2 extends Float> =
   f1['exponent'] extends f2['exponent']
     ? MatchFloatsResult<f1, f2>
     : { _: ExpandF2<f1, ExpandFloatExponentOneDigit<f2>> };
+
+export type RemoveExtraZerosFloat<f extends Float> = {
+  fraction: RemoveExtraZerosBits<f['fraction']>;
+  exponent: f['exponent'];
+  is_negative: f['is_negative'];
+};
