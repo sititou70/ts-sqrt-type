@@ -4,8 +4,15 @@
   "description": "",
   "main": "src/index.ts",
   "scripts": {
-    "start": "tsc --project tsconfig.run.json --noEmit; exit 0",
-    "test": "tsc --project tsconfig.test.json --noEmit"
+    "start": "npm run sqrt2",
+    "sqrt2": "tsc --project tsconfigs/sqrt2.json --noEmit; exit 0",
+    "sqrt3": "tsc --project tsconfigs/sqrt3.json --noEmit; exit 0",
+    "sqrt5": "tsc --project tsconfigs/sqrt5.json --noEmit; exit 0",
+    "sqrt6": "tsc --project tsconfigs/sqrt6.json --noEmit; exit 0",
+    "sqrt7": "tsc --project tsconfigs/sqrt7.json --noEmit; exit 0",
+    "sqrt8": "tsc --project tsconfigs/sqrt8.json --noEmit; exit 0",
+    "sqrt10": "tsc --project tsconfigs/sqrt10.json --noEmit; exit 0",
+    "test": "tsc --project tsconfigs/test.json --noEmit"
   },
   "keywords": [],
   "author": "sititou70",

@@ -1,0 +1,1 @@
+{ "extends": "./base.json", "include": ["../src/index/sqrt6.ts"] }
