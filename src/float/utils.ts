@@ -1,7 +1,8 @@
+import { DivideAndModUint, DivideAndModUintResult } from '../integer/divide';
 import { MultiUint } from '../integer/multi';
 import { Bits, Float } from '../model';
 import { Cast } from '../utils/cast';
-import { CompareNatural, Succ } from '../utils/natural_number';
+import { CompareNatural, Natural, Pred, Succ } from '../utils/natural_number';
 import { ExtractResult } from '../utils/result_container';
 
 type Ten = [0, 1, 0, 1];
@@ -10,6 +11,14 @@ type ExpandFloatExponentOneDigit<f extends Float> = {
     ? Cast<A, Bits>
     : never;
   exponent: Succ<f['exponent']>;
+  is_negative: f['is_negative'];
+};
+
+export type ShrinkFloatExponentOneDigit<f extends Float> = {
+  fraction: (DivideAndModUint<f['fraction'], Ten> extends infer A
+    ? Cast<A, DivideAndModUintResult>
+    : never)['result'];
+  exponent: Pred<f['exponent']> extends infer A ? Cast<A, Natural> : never;
   is_negative: f['is_negative'];
 };
 

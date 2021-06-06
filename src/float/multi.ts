@@ -1,10 +1,12 @@
 import { MultiUint } from '../integer/multi';
-import { Float } from '../model';
+import { Bits, Float } from '../model';
 import { Cast } from '../utils/cast';
 import { AddNatural } from '../utils/natural_number';
 
 export type MultiFloat<f1 extends Float, f2 extends Float> = {
-  fraction: MultiUint<f1['fraction'], f2['fraction']>;
+  fraction: MultiUint<f1['fraction'], f2['fraction']> extends infer A
+    ? Cast<A, Bits>
+    : never;
   exponent: AddNatural<f1['exponent'], f2['exponent']>;
   is_negative: {
     'false,false': false;
