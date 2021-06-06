@@ -23,8 +23,8 @@ export type NewtonSqrt<
   squared extends Float,
   initial_value extends Float,
   max_calc_num extends Natural
-> = ExtractResult<_NewtonSqrt2<initial_value, squared, [], max_calc_num>>;
-type _NewtonSqrt2<
+> = ExtractResult<_NewtonSqrt<initial_value, squared, [], max_calc_num>>;
+type _NewtonSqrt<
   current_value extends Float,
   squared extends Float,
   count extends Natural,
@@ -32,7 +32,7 @@ type _NewtonSqrt2<
 > = count extends max_calc_num
   ? current_value
   : {
-      _: _NewtonSqrt2<
+      _: _NewtonSqrt<
         NewtonSqrtStep<current_value, squared>,
         squared,
         Succ<count>,

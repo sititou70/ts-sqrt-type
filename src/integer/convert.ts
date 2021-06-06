@@ -29,14 +29,14 @@ type UintToDigit10Map = {
 export type UintToDigit10<bits extends Bits> = _UintToDigit10<
   MatchBitLength<bits, [0, 0, 0, 0]>['b1']
 >;
-export type _UintToDigit10<bits extends Bits> =
+type _UintToDigit10<bits extends Bits> =
   UintToDigit10Map[`${bits[0]}${bits[1]}${bits[2]}${bits[3]}`];
 
 type Ten = [0, 1, 0, 1];
 export type UintToStr<bits extends Bits> = bits extends 0[]
   ? '0'
-  : ExtractResult<_UintToStr<'', bits>>;
-export type _UintToStr<result extends string, rest_of_bits extends Bits> =
+  : ExtractResult<_UintToStr1<'', bits>>;
+type _UintToStr1<result extends string, rest_of_bits extends Bits> =
   rest_of_bits extends 0[]
     ? result
     : {
@@ -65,7 +65,7 @@ type _UintToStr3<
   divide_result extends DivideAndModUintResult
 > = to_digit10_result extends string
   ? {
-      _: _UintToStr<`${to_digit10_result}${result}`, divide_result['result']>;
+      _: _UintToStr1<`${to_digit10_result}${result}`, divide_result['result']>;
     }
   : '_UintToStr3: never';
 
@@ -102,9 +102,9 @@ export type GetLastDigit10<str extends string> =
   Exception<`GetLastDigit10: unexpected syntax: '${str}'`>;
 
 export type StrToUint<str extends string> = ExtractResult<
-  _StrToUint<[0], [1], str>
+  _StrToUint1<[0], [1], str>
 >;
-type _StrToUint<
+type _StrToUint1<
   result extends Bits,
   current_weight extends Bits,
   rest_of_str extends string
@@ -117,7 +117,7 @@ type _StrToUint2<
   get_last_str_result extends GetLastDigit10Result | Exception
 > = get_last_str_result extends GetLastDigit10Result
   ? {
-      _: _StrToUint<
+      _: _StrToUint1<
         AddInt<
           result,
           MultiUint<

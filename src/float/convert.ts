@@ -10,7 +10,7 @@ import { Natural, Succ } from '../utils/natural_number';
 import { ExtractResult } from '../utils/result_container';
 
 export type FloatToStr<f extends Float> = ExtractResult<
-  _FloatToStr2<
+  _FloatToStr<
     '',
     GetLastDigit10<
       UintToStr<f['fraction']> extends infer A ? Cast<A, string> : never
@@ -25,7 +25,7 @@ export type FloatToStr<f extends Float> = ExtractResult<
 > extends infer A
   ? Cast<A, string>
   : never;
-type _FloatToStr2<
+type _FloatToStr<
   result extends string,
   last_digit_result extends GetLastDigit10Result,
   recursive_cnt extends Natural,
@@ -38,7 +38,7 @@ type _FloatToStr2<
 > extends 1
   ? `${consts['f']['is_negative'] extends true ? '-' : ''}${result}`
   : {
-      _: _FloatToStr2<
+      _: _FloatToStr<
         `${last_digit_printed extends false
           ? last_digit_result['last']
           : '0'}${recursive_cnt extends consts['f']['exponent']

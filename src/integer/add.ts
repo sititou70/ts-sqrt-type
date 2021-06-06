@@ -1,6 +1,5 @@
 import { Bit, Bits } from '../model';
 import { Cast } from '../utils/cast';
-import { Exception } from '../utils/exception';
 import {
   Natural,
   NaturalToNumber,
@@ -74,12 +73,12 @@ type _MultiFullAdder2<
   >;
 };
 
-export type AddInt<b1 extends Bits, b2 extends Bits> = _AddBits2<
+export type AddInt<b1 extends Bits, b2 extends Bits> = _AddBits<
   MultiFullAdder<b1, b2>
 > extends infer A
   ? Cast<A, Bits>
   : never;
-type _AddBits2<adder_result extends MultiFullAdderResult> =
+type _AddBits<adder_result extends MultiFullAdderResult> =
   adder_result['carry_out'] extends 1
     ? [...adder_result['sum'], 1]
     : adder_result['sum'];

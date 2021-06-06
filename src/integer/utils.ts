@@ -59,16 +59,16 @@ export type CompareUint<b1 extends Bits, b2 extends Bits> = And<
   b2 extends [] ? 1 : 0
 > extends 1
   ? 0
-  : Cast<ExtractResult<_CompareUint2<MatchBitLength<b1, b2>>>, 1 | 0 | -1>;
-type _CompareUint2<consts extends { b1: Bits; b2: Bits }> = {
-  _: _CompareUint3<Pred<NumberToNatural<consts['b1']['length']>>, consts>;
+  : Cast<ExtractResult<_CompareUint1<MatchBitLength<b1, b2>>>, 1 | 0 | -1>;
+type _CompareUint1<consts extends { b1: Bits; b2: Bits }> = {
+  _: _CompareUint2<Pred<NumberToNatural<consts['b1']['length']>>, consts>;
 };
-type _CompareUint3<
+type _CompareUint2<
   index extends Natural | Exception,
   consts extends { b1: Bits; b2: Bits }
 > = index extends Natural
   ? {
-      _: _CompareUint4<
+      _: _CompareUint3<
         index,
         CompareBit<
           consts['b1'][NaturalToNumber<index>],
@@ -78,12 +78,12 @@ type _CompareUint3<
       >;
     }
   : 0;
-type _CompareUint4<
+type _CompareUint3<
   index extends Natural,
   compare_bit_result extends number,
   consts extends { b1: Bits; b2: Bits }
 > = compare_bit_result extends 0
-  ? { _: _CompareUint3<Pred<index>, consts> }
+  ? { _: _CompareUint2<Pred<index>, consts> }
   : compare_bit_result;
 
 // 0b1100 -> 0b110 <=> [0, 0, 1, 1] -> [0, 1, 1]

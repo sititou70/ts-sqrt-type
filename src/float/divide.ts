@@ -7,11 +7,11 @@ import { ExtractResult } from '../utils/result_container';
 
 type Ten = [0, 1, 0, 1];
 export type DivideFloat<f1 extends Float, f2 extends Float> = ExtractResult<
-  _DivideFloat2<f1['fraction'], [], { f1: f1; f2: f2 }>
+  _DivideFloat<f1['fraction'], [], { f1: f1; f2: f2 }>
 > extends infer A
   ? Cast<A, Float>
   : never;
-type _DivideFloat2<
+type _DivideFloat<
   adjusted_f1_frac extends Bits,
   times extends Natural,
   consts extends { f1: Float; f2: Float }
@@ -30,7 +30,7 @@ type _DivideFloat2<
       }[`${consts['f1']['is_negative']},${consts['f2']['is_negative']}`];
     }
   : {
-      _: _DivideFloat2<
+      _: _DivideFloat<
         MultiUint<adjusted_f1_frac, Ten> extends infer A
           ? Cast<A, Bits>
           : never,

@@ -4,12 +4,12 @@ import { Cast } from '../utils/cast';
 import { SubUfloat } from './sub';
 import { MatchAndExpandFloatsExponent, MatchFloatsResult } from './utils';
 
-export type AddUfloat<f1 extends Float, f2 extends Float> = _AddUfloat2<
+export type AddUfloat<f1 extends Float, f2 extends Float> = _AddUfloat<
   MatchAndExpandFloatsExponent<f1, f2>
 > extends infer A
   ? Cast<A, Float>
   : never;
-type _AddUfloat2<match_result extends MatchFloatsResult> = {
+type _AddUfloat<match_result extends MatchFloatsResult> = {
   fraction: AddInt<
     match_result['f1']['fraction'],
     match_result['f2']['fraction']
