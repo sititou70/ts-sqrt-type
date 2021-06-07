@@ -1,5 +1,7 @@
 # ts-sqrt-type
 
+![top](https://user-images.githubusercontent.com/18525488/121002553-6f9e5980-c7c7-11eb-8c66-a89f1f4929bc.png)
+
 Calculate square roots **using only the type system.**
 
 ## setup
